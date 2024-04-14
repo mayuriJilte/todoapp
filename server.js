@@ -77,45 +77,6 @@ app.delete("/todos/:todoId", async (request, response) => {
   response.send("Todo Deleted");
 });
 
-// Updates the details of a specific todo based on the todo ID
-app.put("/todos/:todoId", async (request, response) => {
-  const { todoId } = request.params;
-  console.log(todoId);
-  const requestBody = request.body;
-  let updateColumn = "";
-  switch (true) {
-    case requestBody.title !== undefined:
-      updateColumn = "Title";
-      break;
-    case requestBody.status !== undefined:
-      updateColumn = "Status";
-      break;
-    case requestBody.description !== undefined:
-      updateColumn = "Description";
-      break;
-  }
-  const previousTodoQuery = `
-      SELECT * FROM todos WHERE id=${todoId};
-      `;
-  console.log(previousTodoQuery);
-  const previousTodo = await db.get(previousTodoQuery);
-  console.log(previousTodo);
-  const {
-    title = previousTodo.title,
-    description = previousTodo.description,
-    status = previousTodo.status,
-  } = request.body;
 
-  const updateTodosQuery = `
-    UPDATE
-      todos
-    SET
-      title='${title}',
-      description='${description}'
-      status = '${status}',
-      
-    WHERE id=${todoId};`;
-  console.log(updateTodosQuery);
-  await db.run(updateTodosQuery);
-  response.send(`${updateColumn} Updated`);
-});
+module.exports = app;
+
